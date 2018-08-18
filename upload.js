@@ -1,6 +1,7 @@
 const http=require('http');
 const fs=require("fs");
-const multiparty = require('../node_modules/multiparty');
+const multiparty = require('multiparty');
+let filePath='./uploaded/'
 let extendName
 let lastFileName
 let curFileName
@@ -45,23 +46,28 @@ let server=http.createServer(function(req,res){
     }
 
     part.on('aborted',function(err){
-      console.log(err)
+      console.log('part abort'+err)
     })
 
-    part.on('error', function(){
-      res.on('error', function(){});
-      res.end( 'Error receiving');
+    part.on('error', function(err){
+      console.log('part error'+err)
     });
   });
 
+  form.on('aborted',function(err){
+    console.log('form abort:'+err)
+  })
+  form.on('error',function(err){
+    console.log('form error:',err)
+    res.end( 'Error receiving');
+  })
   form.on('field',function(name,value){
-    // console.log('field:',name,value)
     if(name==='start')start=value
     if(name==="name" ){
       if(lastFileName!==value){
         lastFileName=value
         extendName=value.match(/.*\.(.*)/)[1]
-        curFileName=Date.now()+'.'+extendName
+        curFileName=filePath+Date.now()+'.'+extendName
         try {
           fs.accessSync(curFileName);
         } catch (err) {
