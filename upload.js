@@ -9,12 +9,23 @@ let start
 let writable
 
 let server=http.createServer(function(req,res){
-
   res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS");
 
-  let form = new multiparty.Form();
+  let form = new multiparty.Form({
+    // autoFields:true,
+    // autoFiles:false
+  });
 
-  form.parse(req)
+
+  if(req.method==="OPTIONS"){
+    res.statusCode=204
+    res.end()
+  }else{
+    //此处会检测content-type，而options请求不带content-type，因此会触发错误
+    form.parse(req)
+  }
+
   form.on('part', function(part) {
     if (!part.filename) {
       part.resume();
@@ -32,12 +43,19 @@ let server=http.createServer(function(req,res){
       });
       part.resume();
     }
-    part.on('error', function(err) {
+
+    part.on('aborted',function(err){
       console.log(err)
+    })
+
+    part.on('error', function(){
+      res.on('error', function(){});
+      res.end( 'Error receiving');
     });
   });
 
   form.on('field',function(name,value){
+    // console.log('field:',name,value)
     if(name==='start')start=value
     if(name==="name" ){
       if(lastFileName!==value){
