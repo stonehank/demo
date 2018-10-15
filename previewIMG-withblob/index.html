@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        *{ margin:0;padding:0; }
+        .wrap{ margin:50px 0; }
+        #show{ border:1px solid #000; width:50%; height:300px; right:0;top:0; position:absolute; }
+    </style>
+</head>
+<body>
+<div class="wrap">
+    <label for="file">选择图片</label><input id="file" type="file" />
+</div>
+<div class="wrap">
+    <button id="start">预览</button>
+</div>
+<div id="show">
+    <p>文件显示区域</p>
+    <div id="showImg"></div>
+</div>
+</body>
+<script>
+  let file=document.getElementById("file")
+  let btnStart=document.getElementById("start")
+  let showImg=document.getElementById("showImg")
+  let img,fr,newURL
+  let isPreviewing=false
+
+  btnStart.addEventListener('click',function(){
+    isPreviewing=true
+    let blob=file.files[0];
+    console.log(blob)
+    preview(blob)
+  })
+
+  function createIMG(){
+    if(!img)img=document.createElement("img")
+    img.src=newURL
+    img.style.width='400px'
+    img.style.height='200px'
+    showImg.appendChild(img)
+  }
+
+  async function  preview(blob){
+    let flag=await check(blob)
+    if(flag){
+      createIMG()
+      // fr.onload=function(){
+      //   newURL=fr.result
+      //   createIMG()
+      // }
+    }
+  }
+  
+  function check(blob){
+    // fr=new FileReader()
+    if(blob.type.indexOf('image')!==-1){
+      // fr.readAsDataURL(blob);
+      newURL=window.URL.createObjectURL(blob)
+      return true
+    }else{
+      alert("选择图片")
+      return false
+    }
+  }
+</script>
+</html>
