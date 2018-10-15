@@ -1,0 +1,23 @@
+{
+  "name": "5d3dea234ac6bc200bdef9c181c0a645",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@gist.github.com/5d3dea234ac6bc200bdef9c181c0a645.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://gist.github.com/5d3dea234ac6bc200bdef9c181c0a645"
+  },
+  "homepage": "https://gist.github.com/5d3dea234ac6bc200bdef9c181c0a645",
+  "dependencies": {
+    "multiparty": "^4.2.1"
+  }
+}
